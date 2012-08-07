@@ -206,6 +206,40 @@ namespace System.Numerics {
 			return new BigDecimal(value, scale);
 		}
 
+		private BigDecimal Upscale(ushort newScale) {
+			if (newScale < scale)
+				throw new InvalidOperationException("Cannot upscale a BigDecimal to a smaller scale!");
+
+			return new BigDecimal(value * BigInteger.Pow(10, newScale - scale), newScale);
+		}
+
+		private static ushort SameScale(ref BigDecimal left, ref BigDecimal right) {
+			var newScale = Math.Max(left.scale, right.scale);
+			left = left.Upscale(newScale);
+			right = right.Upscale(newScale);
+			return newScale;
+		}
+
+		public static BigDecimal operator +(BigDecimal left, BigDecimal right) {
+			var scale = SameScale(ref left, ref right);
+			return new BigDecimal(left.value + right.value, scale);
+		}
+
+		public static BigDecimal operator -(BigDecimal left, BigDecimal right) {
+			var scale = SameScale(ref left, ref right);
+			return new BigDecimal(left.value - right.value, scale);
+		}
+
+		public static BigDecimal operator *(BigDecimal left, BigDecimal right) {
+			var value = left.value * right.value;
+			var scale = (int)left.scale + (int)right.scale;
+			if (scale > ushort.MaxValue) {
+				value /= BigInteger.Pow(10, scale - ushort.MaxValue);
+				scale = ushort.MaxValue;
+			}
+			return new BigDecimal(value, (ushort)scale);
+		}
+
 		private enum ParseState {
 			/// <summary>
 			/// First character

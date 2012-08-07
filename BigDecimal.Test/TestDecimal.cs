@@ -97,5 +97,31 @@ namespace System.Numerics.Test {
 			d = BigDecimal.Parse("123.45e-6");
 			Assert.AreEqual("0.00012345", d.ToString());
 		}
+
+		/// <summary>
+		/// Tests the parse methods.
+		/// </summary>
+		[TestMethod]
+		public void TestOperators() {
+			BigDecimal d;
+
+			d = BigDecimal.Parse("1") + BigDecimal.Parse("2");
+			Assert.AreEqual("3.", d.ToString());
+
+			d = BigDecimal.Parse("2.5") + BigDecimal.Parse("45.00");
+			Assert.AreEqual("47.50", d.ToString());
+
+			d = BigDecimal.Parse("1") - BigDecimal.Parse("2");
+			Assert.AreEqual("-1.", d.ToString());
+
+			d = BigDecimal.Parse("2.5") - BigDecimal.Parse("45.00");
+			Assert.AreEqual("-42.50", d.ToString());
+
+			d = BigDecimal.Parse("1") * BigDecimal.Parse("2");
+			Assert.AreEqual("2.", d.ToString());
+
+			d = BigDecimal.Parse("2.5") * BigDecimal.Parse("45.00");
+			Assert.AreEqual("112.500", d.ToString());
+		}
 	}
 }
