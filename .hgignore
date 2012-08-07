@@ -1,0 +1,7 @@
+syntax: glob
+[bB]in
+[oO]bj
+*.suo
+*.user
+*.*crunch*
+TestResults
